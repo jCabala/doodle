@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Typelevel Laika" />
+    <title>Layout</title>
+    
+    
+    <meta name="description" content="docs" />
+    
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400|Source+Sans+Pro:300,400,600"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Pro:400" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../creative-scala.css" />
+    <script src="../main.js"></script>
+    <script> /* for avoiding page load transitions */</script>
+</head>
+
+<body>
+    <nav id="topbar"><p><a href="path.html">←</a></p>
+<p><a href="../../">Doodle</a></p>
+<p><a href="style.html">→</a></p></nav>
+    <nav id="sidebar">
+        <ul class="nav-list">
+          <li class="level1 nav-leaf"><a href="../">Doodle</a></li>
+          <li class="level1 nav-node"><a href="../concepts/">Core Concepts</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/principles.html">Principles</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/algebras.html">Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/drawing-picture.html">Picture and Drawing</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/picture-object.html">Picture Object</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/syntax.html">Syntax</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/frame-canvas.html">Frame and Canvas</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/effects.html">Effects</a></li>
+          <li class="level1 nav-node"><a href="index.html">Creating Pictures</a></li>
+          <li class="level2 nav-leaf"><a href="picture-image.html">Picture and Image</a></li>
+          <li class="level2 nav-leaf"><a href="shape.html">Shapes</a></li>
+          <li class="level2 nav-leaf"><a href="path.html">Paths</a></li>
+          <li class="level2 active nav-leaf"><a href="#">Layout</a></li>
+          <li class="level2 nav-leaf"><a href="style.html">Style</a></li>
+          <li class="level2 nav-leaf"><a href="transform.html">Transforms</a></li>
+          <li class="level2 nav-leaf"><a href="size.html">Size</a></li>
+          <li class="level2 nav-leaf"><a href="drawing.html">Drawing to the Screen</a></li>
+          <li class="level2 nav-leaf"><a href="writing.html">Writing to a File</a></li>
+          <li class="level1 nav-leaf"><a href="../core/">Core</a></li>
+          <li class="level1 nav-node"><a href="../interact/">Interactivity</a></li>
+          <li class="level2 nav-leaf"><a href="../interact/animation.html">Animations</a></li>
+          <li class="level1 nav-node"><a href="../algebra/">Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/using.html">Using Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/picture.html">Picture</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/algebras.html">Available Algebras</a></li>
+          <li class="level1 nav-leaf"><a href="../effect/">Effects</a></li>
+          <li class="level1 nav-leaf"><a href="../development/">Developing Doodle</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <main class="content">
+            <h1 id="layout" class="title">Layout</h1>
+            
+            <h2 id="concept" class="section">Concept</h2>
+            <p>Positioning pictures relative to other pictures is important for many compositions, and the <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/algebra/Layout.html">Layout</a> algebra provides a flexible system for handling this.</p>
+            
+            <h3 id="above-beside-and-on" class="section">Above, Beside, and On</h3>
+            <p>The most basic layout methods are <code>above</code>, <code>beside</code>, and <code>on</code>. They do what their names suggest, putting a picture above, beside, or on top of another picture. Below is an example.</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">core</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">java2d</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.*
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">basicLayout</span><span> =
+  </span><span class="type-name">Picture</span><span>
+    .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+    .</span><span class="identifier">strokeColor</span><span>(</span><span class="type-name">Color</span><span>.</span><span class="identifier">blue</span><span>)
+    .</span><span class="identifier">beside</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">square</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">strokeColor</span><span>(</span><span class="type-name">Color</span><span>.</span><span class="identifier">darkBlue</span><span>))
+    .</span><span class="identifier">above</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">triangle</span><span>(</span><span class="number-literal">100</span><span>, </span><span class="number-literal">100</span><span>).</span><span class="identifier">strokeColor</span><span>(</span><span class="type-name">Color</span><span>.</span><span class="identifier">crimson</span><span>))
+    .</span><span class="identifier">strokeWidth</span><span>(</span><span class="number-literal">5.0</span><span>)</span></code></pre>
+            <p>Here&#39;s the output this creates.</p>
+            <div class="default-image-block">
+              <img src="basic-layout.png">
+            </div>
+            <p>As a convenience, there are also methods <code>below</code> and <code>under</code>, which are the opposite of <code>above</code> and <code>on</code> respectively. That is, <code>a.above(b) == b.below(a)</code> and <code>a.on(b) == b.under(a)</code></p>
+            
+            <h3 id="bounding-box-and-origin" class="section">Bounding Box and Origin</h3>
+            <p>To really understand how layout works we have to understand how layout works with the bounding box and origin. Every picture has a bounding box and origin. The bounding box defines the outer extent of the picture, and the origin is an arbitrary point within the bounding box. By convention, the built-in <a href="shape.html">shapes</a> and <a href="path.html">paths</a> have their origin in the center of the bounding box. You can position the origin anywhere you want, either by creating your own paths or using the <code>at</code> and <code>originAt</code> methods described below. If necessary, the bounding box will expand to include the origin.</p>
+            <p>We can see the bounding box and origin using the <code>debug</code> method. In the example below I&#39;m displaying the bounding box and origin of the circle and pentagon separately, above the bounding box and origin of the circle beside the pentagon.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">debugLayout</span><span> =
+  </span><span class="type-name">Picture</span><span>
+    .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+    .</span><span class="identifier">debug</span><span>
+    .</span><span class="identifier">beside</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">regularPolygon</span><span>(</span><span class="number-literal">5</span><span>, </span><span class="number-literal">30</span><span>).</span><span class="identifier">debug</span><span>)
+    .</span><span class="identifier">above</span><span>(
+      </span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">beside</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">regularPolygon</span><span>(</span><span class="number-literal">5</span><span>, </span><span class="number-literal">30</span><span>)).</span><span class="identifier">debug</span><span>
+    )</span></code></pre>
+            <div class="default-image-block">
+              <img src="debug-layout.png">
+            </div>
+            <p>This gives us some insight into how the basic layout works. Using <code>beside</code> horizontally aligns the origins of the two pictures,  the creates a new bounding box enclosing the two existing boxes with the new origin in the middle of the line joining the two origins. <code>Above</code> works similarly, except the alignment is vertical, while <code>on</code> simply places the origins at the same location.</p>
+            
+            <h3 id="repositioning-the-origin" class="section">Repositioning the Origin</h3>
+            <p>The origin defines a local coordinate system for each picture, and the origin is always the point (0, 0). Changing the location of the origin is the key to creative layouts. There are two methods that do this:</p>
+            <ul>
+              <li><code>at</code>, which changes the location of the picture relative to the origin; and</li>
+              <li><code>originAt</code>, which changes the location of the origin relative to the picture.</li>
+            </ul>
+            <p>As you can see from the description, the two methods are opposites of one another. Let&#39;s see an example of use.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">atAndOriginAt</span><span> =
+  </span><span class="type-name">Picture</span><span>
+    .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+    .</span><span class="identifier">at</span><span>(</span><span class="number-literal">25</span><span>, </span><span class="number-literal">25</span><span>)
+    .</span><span class="identifier">debug</span><span>
+    .</span><span class="identifier">beside</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">originAt</span><span>(</span><span class="number-literal">25</span><span>, </span><span class="number-literal">25</span><span>).</span><span class="identifier">debug</span><span>)</span></code></pre>
+            <div class="default-image-block">
+              <img src="at-and-origin-at.png">
+            </div>
+            <p>When you want to position pictures at arbitrary locations, a common pattern is to use <code>at</code> and <code>on</code>. For example, here we position five shapes at the points of a pentagon. This also demonstrates we can use polar coordinates with <code>at</code>.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pentagon</span><span> =
+  </span><span class="type-name">Picture</span><span>
+    .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">10</span><span>)
+    .</span><span class="identifier">at</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">0</span><span>.</span><span class="identifier">degrees</span><span>)
+    .</span><span class="identifier">on</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">10</span><span>).</span><span class="identifier">at</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">72</span><span>.</span><span class="identifier">degrees</span><span>))
+    .</span><span class="identifier">on</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">10</span><span>).</span><span class="identifier">at</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">144</span><span>.</span><span class="identifier">degrees</span><span>))
+    .</span><span class="identifier">on</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">10</span><span>).</span><span class="identifier">at</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">216</span><span>.</span><span class="identifier">degrees</span><span>))
+    .</span><span class="identifier">on</span><span>(</span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">10</span><span>).</span><span class="identifier">at</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">288</span><span>.</span><span class="identifier">degrees</span><span>))</span></code></pre>
+            <div class="default-image-block">
+              <img src="pentagon.png">
+            </div>
+            
+            <h3 id="positioning-using-landmarks" class="section">Positioning using Landmarks</h3>
+            <p><a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/Landmark.html">Landmark</a> provides more flexible layout, by allowing you to specify points relative to the bounding box or origin instead of in absolute terms relative to the origin. For example, we can specify the top left of the bounding box by simply using <code>Landmark.topLeft</code> instead of working out the coordinates of this location. Both <code>at</code> and <code>originAt</code> support landmarks.</p>
+            <p>Ultimately, all landmarks are specified relative to the origin, but you can use a percentage <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/Coordinate.html">Coordinate</a> instead of an absolute value. Zero percent is the origin, 100% is the top or right edge of the bounding box, and -100% is the bottom or left edge of the bounding box.</p>
+            <p>In the example below we use landmarks to specify points that are halfway between the origin and the edge of the bounding box. In this simple example we could easily work out the absolute coordinate directly, but landmarks come into their own in more complex examples.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">overlappingCircles</span><span> =
+  </span><span class="type-name">Picture</span><span>
+    .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+    .</span><span class="identifier">originAt</span><span>(</span><span class="type-name">Landmark</span><span>(</span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(</span><span class="number-literal">50</span><span>), </span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(-</span><span class="number-literal">50</span><span>)))
+    .</span><span class="identifier">on</span><span>(
+      </span><span class="type-name">Picture</span><span>
+        .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+        .</span><span class="identifier">originAt</span><span>(</span><span class="type-name">Landmark</span><span>(</span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(-</span><span class="number-literal">50</span><span>), </span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(-</span><span class="number-literal">50</span><span>)))
+    )
+    .</span><span class="identifier">on</span><span>(
+      </span><span class="type-name">Picture</span><span>
+        .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+        .</span><span class="identifier">originAt</span><span>(</span><span class="type-name">Landmark</span><span>(</span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(-</span><span class="number-literal">50</span><span>), </span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(</span><span class="number-literal">50</span><span>)))
+    )
+    .</span><span class="identifier">on</span><span>(
+      </span><span class="type-name">Picture</span><span>
+        .</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+        .</span><span class="identifier">originAt</span><span>(</span><span class="type-name">Landmark</span><span>(</span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(</span><span class="number-literal">50</span><span>), </span><span class="type-name">Coordinate</span><span>.</span><span class="identifier">percent</span><span>(</span><span class="number-literal">50</span><span>)))
+    )</span></code></pre>
+            <div class="default-image-block">
+              <img src="overlapping-circles.png">
+            </div>
+            
+            <h3 id="adjusting-the-bounding-box" class="section">Adjusting the Bounding Box</h3>
+            <p>To adjust the size of the bounding box, instead of the position of the origin, we can use <code>margin</code>. This allows us to add extra space around a picture or, with a negative margin, to have a picture that overflows its bounding box. Here&#39;s an example that uses the form of <code>margin</code> that adjusts both the width and height of the bounding box. There are other variants that allow us to adjust the width and the height separately, or adjust all four edges independently.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">circle</span><span> = </span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">50</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">rollingCircles</span><span> =
+  </span><span class="identifier">circle</span><span>
+    .</span><span class="identifier">margin</span><span>(</span><span class="number-literal">25</span><span>)
+    .</span><span class="identifier">debug</span><span>
+    .</span><span class="identifier">beside</span><span>(</span><span class="identifier">circle</span><span>.</span><span class="identifier">margin</span><span>(</span><span class="number-literal">15</span><span>).</span><span class="identifier">debug</span><span>)
+    .</span><span class="identifier">beside</span><span>(</span><span class="identifier">circle</span><span>.</span><span class="identifier">debug</span><span>)
+    .</span><span class="identifier">beside</span><span>(</span><span class="identifier">circle</span><span>.</span><span class="identifier">margin</span><span>(-</span><span class="number-literal">15</span><span>).</span><span class="identifier">debug</span><span>)
+    .</span><span class="identifier">beside</span><span>(</span><span class="identifier">circle</span><span>.</span><span class="identifier">margin</span><span>(-</span><span class="number-literal">25</span><span>).</span><span class="identifier">debug</span><span>)</span></code></pre>
+            <div class="default-image-block">
+              <img src="rolling-circles.png">
+            </div>
+            
+            <h2 id="implementation" class="section">Implementation</h2>
+            <p>The <code>Layout</code> algebra supports all the features described above, as does <code>Image</code>.</p>
+            <p class="nextPage"><a href="style.html">Style→</a></p>
+        </main>
+        <footer>Creative Scala is copyright Noel Welsh</footer>
+    </div>
+
+    </div>
+</body>
+
+</html>

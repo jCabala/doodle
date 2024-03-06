@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Typelevel Laika" />
+    <title>Paths</title>
+    
+    
+    <meta name="description" content="docs" />
+    
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400|Source+Sans+Pro:300,400,600"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Pro:400" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../creative-scala.css" />
+    <script src="../main.js"></script>
+    <script> /* for avoiding page load transitions */</script>
+</head>
+
+<body>
+    <nav id="topbar"><p><a href="shape.html">←</a></p>
+<p><a href="../../">Doodle</a></p>
+<p><a href="layout.html">→</a></p></nav>
+    <nav id="sidebar">
+        <ul class="nav-list">
+          <li class="level1 nav-leaf"><a href="../">Doodle</a></li>
+          <li class="level1 nav-node"><a href="../concepts/">Core Concepts</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/principles.html">Principles</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/algebras.html">Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/drawing-picture.html">Picture and Drawing</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/picture-object.html">Picture Object</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/syntax.html">Syntax</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/frame-canvas.html">Frame and Canvas</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/effects.html">Effects</a></li>
+          <li class="level1 nav-node"><a href="index.html">Creating Pictures</a></li>
+          <li class="level2 nav-leaf"><a href="picture-image.html">Picture and Image</a></li>
+          <li class="level2 nav-leaf"><a href="shape.html">Shapes</a></li>
+          <li class="level2 active nav-leaf"><a href="#">Paths</a></li>
+          <li class="level2 nav-leaf"><a href="layout.html">Layout</a></li>
+          <li class="level2 nav-leaf"><a href="style.html">Style</a></li>
+          <li class="level2 nav-leaf"><a href="transform.html">Transforms</a></li>
+          <li class="level2 nav-leaf"><a href="size.html">Size</a></li>
+          <li class="level2 nav-leaf"><a href="drawing.html">Drawing to the Screen</a></li>
+          <li class="level2 nav-leaf"><a href="writing.html">Writing to a File</a></li>
+          <li class="level1 nav-leaf"><a href="../core/">Core</a></li>
+          <li class="level1 nav-node"><a href="../interact/">Interactivity</a></li>
+          <li class="level2 nav-leaf"><a href="../interact/animation.html">Animations</a></li>
+          <li class="level1 nav-node"><a href="../algebra/">Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/using.html">Using Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/picture.html">Picture</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/algebras.html">Available Algebras</a></li>
+          <li class="level1 nav-leaf"><a href="../effect/">Effects</a></li>
+          <li class="level1 nav-leaf"><a href="../development/">Developing Doodle</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <main class="content">
+            <h1 id="paths" class="title">Paths</h1>
+            
+            <h2 id="concept" class="section">Concept</h2>
+            <p>Paths are a way to construct complex shapes,
+            implemented by the <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/algebra/Path.html">Path</a> algebra and the <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/OpenPath.html">OpenPath</a> <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/ClosedPath.html">ClosedPath</a> types. 
+            A path specifies how to control a virtual pen to draw a line. 
+            There are three different commands that a path can contain:</p>
+            <ul>
+              <li>straight lines;</li>
+              <li><a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">bezier curves</a>; and</li>
+              <li>straight line movement that doesn&#39;t draw to the screen.</li>
+            </ul>
+            <p>Here&#39;s an example of a path. Notice that it has examples of all of the different components above.</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">core</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">java2d</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.*
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">feather</span><span> =
+  </span><span class="type-name">ClosedPath</span><span>.</span><span class="identifier">empty</span><span>
+    .</span><span class="identifier">lineTo</span><span>(</span><span class="number-literal">100</span><span>, </span><span class="number-literal">100</span><span>)
+    .</span><span class="identifier">curveTo</span><span>(</span><span class="number-literal">90</span><span>, </span><span class="number-literal">75</span><span>, </span><span class="number-literal">90</span><span>, </span><span class="number-literal">25</span><span>, </span><span class="number-literal">10</span><span>, </span><span class="number-literal">10</span><span>)
+    .</span><span class="identifier">moveTo</span><span>(</span><span class="number-literal">100</span><span>, </span><span class="number-literal">100</span><span>)
+    .</span><span class="identifier">curveTo</span><span>(</span><span class="number-literal">75</span><span>, </span><span class="number-literal">90</span><span>, </span><span class="number-literal">25</span><span>, </span><span class="number-literal">90</span><span>, </span><span class="number-literal">10</span><span>, </span><span class="number-literal">10</span><span>)
+    .</span><span class="identifier">path</span></code></pre>
+            <p>Drawing this path creates the output below.</p>
+            <div class="default-image-block">
+              <img src="basic-path.png">
+            </div>
+            <p>You probably noticed this is a <code>ClosedPath</code>, which suggests there is also an <code>OpenPath</code>. This is correct. The difference is how the path ends. If a <code>ClosedPath</code> doesn&#39;t end at the point it started (which is the origin), it will have a straight line inserted joining the end to the start. An <code>OpenPath</code> will not.</p>
+            <p>Here&#39;s an example showing the difference. We create a curve, drawn as an open and a closed path. Notice how the open path is just a curve, while the closed path has an extra line added joining the start and end points.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">open</span><span> =
+  </span><span class="type-name">OpenPath</span><span>.</span><span class="identifier">empty</span><span>.</span><span class="identifier">curveTo</span><span>(</span><span class="number-literal">90</span><span>, </span><span class="number-literal">0</span><span>, </span><span class="number-literal">100</span><span>, </span><span class="number-literal">10</span><span>, </span><span class="number-literal">50</span><span>, </span><span class="number-literal">50</span><span>).</span><span class="identifier">path</span><span>.</span><span class="identifier">strokeColor</span><span>(</span><span class="type-name">Color</span><span>.</span><span class="identifier">red</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">closed</span><span> =
+  </span><span class="type-name">ClosedPath</span><span>.</span><span class="identifier">empty</span><span>.</span><span class="identifier">curveTo</span><span>(</span><span class="number-literal">90</span><span>, </span><span class="number-literal">0</span><span>, </span><span class="number-literal">100</span><span>, </span><span class="number-literal">10</span><span>, </span><span class="number-literal">50</span><span>, </span><span class="number-literal">50</span><span>).</span><span class="identifier">path</span><span>.</span><span class="identifier">strokeColor</span><span>(</span><span class="type-name">Color</span><span>.</span><span class="identifier">blue</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">curves</span><span> = </span><span class="identifier">open</span><span>.</span><span class="identifier">beside</span><span>(</span><span class="identifier">closed</span><span>)</span></code></pre>
+            <div class="default-image-block">
+              <img src="open-closed-paths.png">
+            </div>
+            
+            <h2 id="implementation" class="section">Implementation</h2>
+            <p><a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/ClosedPath.html">ClosedPath</a> and <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/OpenPath.html">OpenPath</a> are both part of <code>doodle.core</code>, and not tied to either algebras or <code>Image</code>.</p>
+            <p>You can create a path by calling the <code>empty</code> method on either <code>ClosedPath</code> or <code>OpenPath</code>, and then calling methods on the resulting object. This is the approach used above. You can also creates instances of <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/PathElement.html">PathElement</a> and create a path from a <code>List[PathElement]</code>.</p>
+            <p>To convert a path to a <code>Picture</code> you can use the <code>path</code> syntax method, which is demonstrated in the examples above, or use the <code>path</code> method on the <code>Picture</code> object.</p>
+            <p>To create an <code>Image</code> from a path, use the <code>path</code> method on <code>Image</code>. Here&#39;s an example.</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">image</span><span>.*
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">openPath</span><span> = </span><span class="type-name">OpenPath</span><span>.</span><span class="identifier">empty</span><span>.</span><span class="identifier">lineTo</span><span>(</span><span class="number-literal">100</span><span>, </span><span class="number-literal">100</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">closedPath</span><span> = </span><span class="type-name">ClosedPath</span><span>.</span><span class="identifier">empty</span><span>.</span><span class="identifier">lineTo</span><span>(</span><span class="number-literal">100</span><span>, </span><span class="number-literal">100</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">path1</span><span> = </span><span class="type-name">Image</span><span>.</span><span class="identifier">path</span><span>(</span><span class="identifier">openPath</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">path2</span><span> = </span><span class="type-name">Image</span><span>.</span><span class="identifier">path</span><span>(</span><span class="identifier">closedPath</span><span>)</span></code></pre>
+            
+            <h2 id="utilities" class="section">Utilities</h2>
+            <p>There are several utilities to create common shapes. These are available as both <code>Picture</code> and <code>Image</code> constructors.</p>
+            <ul>
+              <li><code>equilateralTriangle(width)</code> creates an equilateral triangle with the given side length.</li>
+              <li><code>regularPolygon(sides, radius)</code> creates a regular polygon with the given number of sides and radius. </li>
+              <li><code>star(points, outerRadius, innerRadius)</code> creates a star with the given number of points. The points extend as far as <code>outerRadius</code> and go in to <code>innerRadius</code>. </li>
+              <li><code>rightArrow(width, height)</code> creates an arrow points to the right with the given width and height.</li>
+              <li><code>roundedRectangle(width, height, radius)</code> creates a rectangle of the given width and height, with rounded corners with size given by <code>radius</code>.</li>
+            </ul>
+            <p>These, and other methods, also exist on <code>OpenPath</code> and <code>ClosedPath</code>.
+            You can also create these paths as a <code>List[PathElement]</code> by calling the methods on <a class="api" href="https://javadoc.io/doc/org.creativescala/doodle-docs_3/latest/doodle/core/PathElement.html">PathElement</a>.</p>
+            <p>There is also <code>interpolatingSpline</code>, which creates a curve that intersects a given sequence of points. Here&#39;s an example.</p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">points</span><span> =
+  </span><span class="keyword">for</span><span> (</span><span class="identifier">x</span><span> &lt;- </span><span class="number-literal">0</span><span>.</span><span class="identifier">to</span><span>(</span><span class="number-literal">360</span><span>)) </span><span class="keyword">yield</span><span> </span><span class="type-name">Point</span><span>(</span><span class="identifier">x</span><span>, </span><span class="identifier">x</span><span>.</span><span class="identifier">degrees</span><span>.</span><span class="identifier">sin</span><span> * </span><span class="number-literal">100</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">curve</span><span> = </span><span class="type-name">Picture</span><span>.</span><span class="identifier">interpolatingSpline</span><span>(</span><span class="identifier">points</span><span>.</span><span class="identifier">toList</span><span>)</span></code></pre>
+            <div class="default-image-block">
+              <img src="curve.png">
+            </div>
+            <p class="nextPage"><a href="layout.html">Layout→</a></p>
+        </main>
+        <footer>Creative Scala is copyright Noel Welsh</footer>
+    </div>
+
+    </div>
+</body>
+
+</html>

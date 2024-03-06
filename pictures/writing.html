@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Typelevel Laika" />
+    <title>Writing to a File</title>
+    
+    
+    <meta name="description" content="docs" />
+    
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400|Source+Sans+Pro:300,400,600"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Pro:400" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../creative-scala.css" />
+    <script src="../main.js"></script>
+    <script> /* for avoiding page load transitions */</script>
+</head>
+
+<body>
+    <nav id="topbar"><p><a href="drawing.html">←</a></p>
+<p><a href="../../">Doodle</a></p>
+<p><a href="../core/">→</a></p></nav>
+    <nav id="sidebar">
+        <ul class="nav-list">
+          <li class="level1 nav-leaf"><a href="../">Doodle</a></li>
+          <li class="level1 nav-node"><a href="../concepts/">Core Concepts</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/principles.html">Principles</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/algebras.html">Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/drawing-picture.html">Picture and Drawing</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/picture-object.html">Picture Object</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/syntax.html">Syntax</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/frame-canvas.html">Frame and Canvas</a></li>
+          <li class="level2 nav-leaf"><a href="../concepts/effects.html">Effects</a></li>
+          <li class="level1 nav-node"><a href="index.html">Creating Pictures</a></li>
+          <li class="level2 nav-leaf"><a href="picture-image.html">Picture and Image</a></li>
+          <li class="level2 nav-leaf"><a href="shape.html">Shapes</a></li>
+          <li class="level2 nav-leaf"><a href="path.html">Paths</a></li>
+          <li class="level2 nav-leaf"><a href="layout.html">Layout</a></li>
+          <li class="level2 nav-leaf"><a href="style.html">Style</a></li>
+          <li class="level2 nav-leaf"><a href="transform.html">Transforms</a></li>
+          <li class="level2 nav-leaf"><a href="size.html">Size</a></li>
+          <li class="level2 nav-leaf"><a href="drawing.html">Drawing to the Screen</a></li>
+          <li class="level2 active nav-leaf"><a href="#">Writing to a File</a></li>
+          <li class="level1 nav-leaf"><a href="../core/">Core</a></li>
+          <li class="level1 nav-node"><a href="../interact/">Interactivity</a></li>
+          <li class="level2 nav-leaf"><a href="../interact/animation.html">Animations</a></li>
+          <li class="level1 nav-node"><a href="../algebra/">Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/using.html">Using Algebras</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/picture.html">Picture</a></li>
+          <li class="level2 nav-leaf"><a href="../algebra/algebras.html">Available Algebras</a></li>
+          <li class="level1 nav-leaf"><a href="../effect/">Effects</a></li>
+          <li class="level1 nav-leaf"><a href="../development/">Developing Doodle</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <main class="content">
+            <h1 id="writing-to-a-file-1" class="title">Writing to a File</h1>
+            <p>An <code>Image</code> or <code>Picture</code> can be written to a file as well as displaying it on screen. The file formats you can write depend on the backend you&#39;re using:</p>
+            <ul>
+              <li>the Java2D backend can write PDF, PNG, GIF, and JPEG; and</li>
+              <li>the SVG backend running on the JVM can write SVG; but</li>
+              <li>the SVG backend running in the web browser cannot write files.</li>
+            </ul>
+            <p>Most people will use the Java2D backend and the examples below show this.</p>
+            
+            <h2 id="imports" class="section">Imports</h2>
+            <p>You need the normal imports to do anything with Doodle. Here are the imports for <code>Picture</code> and the JVM backend.</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">core</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">java2d</span><span>.*
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">unsafe</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">global</span></code></pre>
+            <p>You&#39;ll also need an additional import to write output:</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">doodle</span><span>.</span><span class="identifier">core</span><span>.</span><span class="identifier">format</span><span>.*</span></code></pre>
+            <p>This import makes available the standard formats supported by Doodle. </p>
+            
+            <h2 id="writing-to-a-file-2" class="section">Writing to a File</h2>
+            <p>Call the <code>write</code> method to write to a file, giving the format as a type parameter and the file name as a <code>String</code> parameter. For example, to write a PNG to the file called <code>&quot;circle.png&quot;</code></p>
+            <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">circle</span><span> = </span><span class="type-name">Picture</span><span>.</span><span class="identifier">circle</span><span>(</span><span class="number-literal">100</span><span>)
+  .</span><span class="identifier">strokeWidth</span><span>(</span><span class="number-literal">10.0</span><span>)
+  .</span><span class="identifier">fillColor</span><span>(</span><span class="type-name">Color</span><span>.</span><span class="identifier">crimson</span><span>)
+  
+</span><span class="identifier">circle</span><span>.</span><span class="identifier">write</span><span>[</span><span class="type-name">Png</span><span>](</span><span class="string-literal">&quot;circle.png&quot;</span><span>)</span></code></pre>
+            <p>Instead of using <code>Png</code> you could use <code>Gif</code> or <code>Jpg</code> to specify those file formats. You&#39;d probably want to change the file name as well if you change the format. That&#39;s it! Your masterpiece is now ready to share with the world.</p>
+            <p class="nextPage"><a href="../core/">Core→</a></p>
+        </main>
+        <footer>Creative Scala is copyright Noel Welsh</footer>
+    </div>
+
+    </div>
+</body>
+
+</html>
